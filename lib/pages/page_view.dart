@@ -79,8 +79,8 @@ class _PageViewComponentState extends State<PageViewComponent>
                   Image.asset(
                     ImagesUtility.badges,
                     width: 300,
-                    height: 150,
-                    fit: BoxFit.cover,
+                 height: 350,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(
                     height: 50,
@@ -109,8 +109,8 @@ class _PageViewComponentState extends State<PageViewComponent>
                   Image.asset(
                     ImagesUtility.progress,
                     width: 300,
-                    height:150,
-                    fit: BoxFit.cover,
+                   height: 350,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(
                     height: 50,
@@ -138,8 +138,8 @@ class _PageViewComponentState extends State<PageViewComponent>
                   Image.asset(
                     ImagesUtility.amico,
                     width: 300,
-                    height: 150,
-                    fit: BoxFit.cover,
+                 height: 350,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(
                     height: 50,
@@ -167,8 +167,8 @@ class _PageViewComponentState extends State<PageViewComponent>
                   Image.asset(
                     ImagesUtility.pana,
                     width: 300,
-                    height: 150,
-                    fit: BoxFit.cover,
+                    height: 350,
+                    fit: BoxFit.contain,
                   ),
                   const SizedBox(
                     height: 50,
