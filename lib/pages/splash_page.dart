@@ -1,4 +1,5 @@
-import 'package:edu_vista_app/pages/%E2%80%8EOnBoardingPage.dart';
+
+import 'package:edu_vista_app/pages/onBoarding_page.dart';
 import 'package:edu_vista_app/pages/home_page.dart';
 import 'package:edu_vista_app/services/pref.service.dart';
 import 'package:edu_vista_app/utils/images.utility.dart';

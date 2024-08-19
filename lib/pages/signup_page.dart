@@ -51,7 +51,7 @@ class _SignUpPageState extends State<SignUpPage> {
         children: [
           CustomTextFormField(
             controller: nameController,
-            hintText: 'Mariam Attef ',
+            hintText: 'omnia mohamed ',
             labelText: 'Full Name',
             keyboardType: TextInputType.emailAddress,
           ),

@@ -1,5 +1,9 @@
+import 'package:edu_vista_app/pages/login_page.dart';
+import 'package:edu_vista_app/pages/signup_page.dart';
+import 'package:edu_vista_app/services/pref.service.dart';
 import 'package:edu_vista_app/utils/color.utility.dart';
 import 'package:edu_vista_app/utils/images.utility.dart';
+import 'package:edu_vista_app/widgets/custom_elevated_button.dart';
 import 'package:edu_vista_app/widgets/onboarding_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +64,9 @@ class _PageViewComponentState extends State<PageViewComponent>
             Container(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  _skipFunction(3);
+                },
                 child: const Text(
                   'skip',
                   style: TextStyle(
@@ -103,6 +109,7 @@ class _PageViewComponentState extends State<PageViewComponent>
         )),
       ],
     );
+    
   }
 
   void _handlePageViewChanged(int currentPageIndex) {
@@ -123,6 +130,12 @@ class _PageViewComponentState extends State<PageViewComponent>
       curve: Curves.easeInOut,
     );
   }
+
+  _skipFunction(int index) {
+    _pageViewController.jumpToPage(index);
+  }
+
+  
 
   bool get _isOnDesktopAndWeb {
     if (kIsWeb) {
@@ -253,7 +266,12 @@ class PageIndicator extends StatelessWidget {
                     ),
                   ),
             currentPageIndex == 3
-                ? SizedBox.shrink()
+                ? CustomElevatedButton(
+                    onPressed: () {
+                      PreferencesService.isOnBoardingSeen = true;
+                      Navigator.pushReplacementNamed(context, LoginPage.id); },
+                    text: 'login',
+                  )
                 : RawMaterialButton(
                     onPressed: () {
                       if (currentPageIndex == 3) {
@@ -275,4 +293,6 @@ class PageIndicator extends StatelessWidget {
       ],
     );
   }
+
+ 
 }
