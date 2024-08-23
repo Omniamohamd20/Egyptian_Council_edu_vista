@@ -1,8 +1,10 @@
 
-import 'package:edu_vista_app/pages/onBoarding_page.dart';
-import 'package:edu_vista_app/pages/home_page.dart';
-import 'package:edu_vista_app/services/pref.service.dart';
 import 'package:edu_vista_app/utils/images.utility.dart';
+import 'package:edu_vista_app/pages/home_page.dart';
+import 'package:edu_vista_app/pages/login_page.dart';
+import 'package:edu_vista_app/pages/onBoarding_page.dart';
+import 'package:edu_vista_app/services/pref.service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
@@ -28,7 +30,7 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-             ImagesUtility.logo,
+          ImagesUtility.logo
             ),
             const CircularProgressIndicator()
           ],
@@ -41,7 +43,11 @@ class _SplashPageState extends State<SplashPage> {
     await Future.delayed(const Duration(seconds: 1));
     if (mounted) {
       if (PreferencesService.isOnBoardingSeen) {
-        Navigator.pushReplacementNamed(context, HomePage.id);
+        if (FirebaseAuth.instance.currentUser != null) {
+          Navigator.pushReplacementNamed(context, HomePage.id);
+        } else {
+          Navigator.pushReplacementNamed(context, LoginPage.id);
+        }
       } else {
         Navigator.pushReplacementNamed(context, OnBoardingPage.id);
       }
