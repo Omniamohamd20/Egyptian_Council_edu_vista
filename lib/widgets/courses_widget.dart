@@ -34,17 +34,17 @@ class _CoursesWidgetState extends State<CoursesWidget> {
             );
           }
 
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('Error occurred'),
-            );
-          }
+          // if (snapshot.hasError) {
+          //   return const Center(
+          //     child: Text('Error occurred'),
+          //   );
+          // }
 
-          if (!snapshot.hasData || (snapshot.data?.docs.isEmpty ?? false)) {
-            return const Center(
-              child: Text('No categories found'),
-            );
-          }
+          // if (!snapshot.hasData || (snapshot.data?.docs.isEmpty ?? false)) {
+          //   return const Center(
+          //     child: Text('No categories found'),
+          //   );
+          // }
 
           var courses = List<Course>.from(snapshot.data?.docs
                   .map((e) => Course.fromJson({'id': e.id, ...e.data()}))

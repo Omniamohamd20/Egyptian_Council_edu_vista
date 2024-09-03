@@ -1,298 +1,214 @@
 import 'package:edu_vista_app/pages/login_page.dart';
-import 'package:edu_vista_app/pages/signup_page.dart';
 import 'package:edu_vista_app/services/pref.service.dart';
 import 'package:edu_vista_app/utils/color.utility.dart';
-import 'package:edu_vista_app/utils/images.utility.dart';
 import 'package:edu_vista_app/widgets/custom_elevated_button.dart';
-import 'package:edu_vista_app/widgets/onboarding_indicator.dart';
-import 'package:flutter/foundation.dart';
+import 'package:edu_vista_app/widgets/onboarding/elevated_button_rounded.dart';
+import 'package:edu_vista_app/widgets/onboarding/onboard_indicator.dart';
+import 'package:edu_vista_app/utils/images.utility.dart';
+import 'package:edu_vista_app/widgets/onboarding/onboard_item_widget.dart';
 import 'package:flutter/material.dart';
+// import 'package:smooth_page_indicator/smooth_page_indicator.dart'
 
-void main() => runApp(const OnBoardingPage());
-
-class OnBoardingPage extends StatelessWidget {
+class OnBoardingPage extends StatefulWidget {
   static const String id = 'OnBoardingPage';
+
   const OnBoardingPage({super.key});
-
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: PageViewComponent(),
-      ),
-    );
+  _OnBoardingPageState createState() => _OnBoardingPageState();
+}
+
+class _OnBoardingPageState extends State<OnBoardingPage> {
+  PageController _pageController = PageController();
+  int currentIndex = 0;
+
+  final _kDuration = const Duration(milliseconds: 300);
+  final _kCurve = Curves.ease;
+
+  void onChangedFunction(int index) {
+    setState(() {
+      currentIndex = index;
+    });
   }
-}
-
-class PageViewComponent extends StatefulWidget {
-  const PageViewComponent({super.key});
-
-  @override
-  State<PageViewComponent> createState() => _PageViewComponentState();
-}
-
-class _PageViewComponentState extends State<PageViewComponent>
-    with TickerProviderStateMixin {
-  late PageController _pageViewController;
-  late TabController _tabController;
-  int _currentPageIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageViewController = PageController();
-    _tabController = TabController(length: 4, vsync: this);
+    _pageController = PageController();
   }
 
   @override
   void dispose() {
+    _pageController.dispose();
     super.dispose();
-    _pageViewController.dispose();
-    _tabController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              alignment: Alignment.topRight,
-              child: TextButton(
-                onPressed: () {
-                  _skipFunction(3);
-                },
-                child: const Text(
-                  'skip',
-                  style: TextStyle(
-                    color: ColorUtility.gry,
-                    fontSize: 15.0,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Expanded(
-            flex: 3,
-            child: Container(
-              child: PageView(
-                controller: _pageViewController,
-                onPageChanged: _handlePageViewChanged,
-                children: <Widget>[
-                  onBoardingPage(
-                      ImagesUtility.badges,
-                      'Certification and Badges',
-                      'Earn a certificate after completion of every course'),
-                  onBoardingPage(ImagesUtility.progress, 'Progress Tracking',
-                      'Check your Progress of every course'),
-                  onBoardingPage(ImagesUtility.amico, 'Offline Access',
-                      'Make your course available offline'),
-                  onBoardingPage(ImagesUtility.pana, 'Course Catalog',
-                      'View in which courses you are enrolled'),
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  currentIndex == 3
+                      ? TextButton(
+                          onPressed: () {
+                            _skipFunction(2);
+                          },
+                          child: const Text(
+                            'Back',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w400),
+                          ))
+                      : TextButton(
+                          onPressed: () {
+                            _skipFunction(3);
+                          },
+                          child: const Text(
+                            'Skip',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w400),
+                          )),
                 ],
               ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            Expanded(
+              flex: 3,
+              child: PageView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _pageController,
+                onPageChanged: onChangedFunction,
+                children: const <Widget>[
+                  OnBoardItemWidget(
+                    title: 'Certification and Badges',
+                    image: ImagesUtility.badges,
+                    description:
+                        'Earn a certificate after completion of every course',
+                  ),
+                  OnBoardItemWidget(
+                    title: 'Progress Tracking',
+                    image: ImagesUtility.progress,
+                    description: 'Check your Progress of every course',
+                  ),
+                  OnBoardItemWidget(
+                    title: 'Of f line Acc ess',
+                    image: ImagesUtility.pana,
+                    description: 'Of f line Acc ess',
+                  ),
+                  OnBoardItemWidget(
+                    title: 'Course Catalog',
+                    image: ImagesUtility.frame,
+                    description: 'View in which courses you are enrolled',
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+                child: Column(
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    OnBoardIndicator(
+                      positionIndex: 0,
+                      currentIndex: currentIndex,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    OnBoardIndicator(
+                      positionIndex: 1,
+                      currentIndex: currentIndex,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    OnBoardIndicator(
+                      positionIndex: 2,
+                      currentIndex: currentIndex,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    OnBoardIndicator(
+                      positionIndex: 3,
+                      currentIndex: currentIndex,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 80,
+                ),
+                getButtons
+              ],
             )),
-        Expanded(
-            child: Container(
-          child: PageIndicator(
-            tabController: _tabController,
-            currentPageIndex: _currentPageIndex,
-            onUpdateCurrentPageIndex: _updateCurrentPageIndex,
-            isOnDesktopAndWeb: _isOnDesktopAndWeb,
-          ),
-        )),
-      ],
-    );
-    
-  }
-
-  void _handlePageViewChanged(int currentPageIndex) {
-    if (!_isOnDesktopAndWeb) {
-      return;
-    }
-    _tabController.index = currentPageIndex;
-    setState(() {
-      _currentPageIndex = currentPageIndex;
-    });
-  }
-
-  void _updateCurrentPageIndex(int index) {
-    _tabController.index = index;
-    _pageViewController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 450),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  _skipFunction(int index) {
-    _pageViewController.jumpToPage(index);
-  }
-
-  
-
-  bool get _isOnDesktopAndWeb {
-    if (kIsWeb) {
-      return true;
-    }
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.macOS:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return true;
-      case TargetPlatform.android:
-      case TargetPlatform.iOS:
-      case TargetPlatform.fuchsia:
-        return false;
-    }
-  }
-
-  Widget onBoardingPage(String image, String text1, String text2) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            image,
-            width: 300,
-            height: 350,
-            fit: BoxFit.contain,
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          Text(text1,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: ColorUtility.mediumBlack)),
-          const SizedBox(
-            height: 25,
-          ),
-          Text(text2,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w300,
-                  color: ColorUtility.mediumBlack)),
-        ],
+          ],
+        ),
       ),
     );
   }
-}
 
-// arrows
-class PageIndicator extends StatelessWidget {
-  const PageIndicator({
-    super.key,
-    required this.tabController,
-    required this.currentPageIndex,
-    required this.onUpdateCurrentPageIndex,
-    required this.isOnDesktopAndWeb,
-  });
-
-  final int currentPageIndex;
-  final TabController tabController;
-  final void Function(int) onUpdateCurrentPageIndex;
-  final bool isOnDesktopAndWeb;
-
-  @override
-  Widget build(BuildContext context) {
-    if (!isOnDesktopAndWeb) {
-      return const SizedBox.shrink();
-    }
-
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(3.0),
-              child: OnboardingIndicator(
-                positionIndex: 0,
-                currentIndex: currentPageIndex,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(3.0),
-              child: OnboardingIndicator(
-                positionIndex: 1,
-                currentIndex: currentPageIndex,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(3.0),
-              child: OnboardingIndicator(
-                positionIndex: 2,
-                currentIndex: currentPageIndex,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(3.0),
-              child: OnboardingIndicator(
-                positionIndex: 3,
-                currentIndex: currentPageIndex,
-              ),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            currentPageIndex == 0 || currentPageIndex == 3
-                ? const Text('')
-                : RawMaterialButton(
-                    onPressed: () {
-                      if (currentPageIndex == 0) {
-                        return;
-                      }
-                      onUpdateCurrentPageIndex(currentPageIndex - 1);
-                    },
-                    fillColor: currentPageIndex == 1 || currentPageIndex == 2
-                        ? ColorUtility.gry
-                        : ColorUtility.secondary,
-                    padding: const EdgeInsets.all(10.0),
-                    shape: const CircleBorder(),
-                    child: Icon(
-                      Icons.arrow_back,
-                      size: 20.0,
-                      color: Colors.white,
+  Widget get getButtons => currentIndex == 3
+      ? CustomElevatedButton(onPressed: () => onLogin(), text: 'Login')
+      : Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              currentIndex == 0 || currentIndex == 3
+                  ? const Text('')
+                  : ElevatedButtonRounded(
+                      onPressed: () {
+                        previousFunction();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        size: 30,
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        ColorUtility.gry,
+                      ),
                     ),
-                  ),
-            currentPageIndex == 3
-                ? CustomElevatedButton(
-                    onPressed: () {
-                      PreferencesService.isOnBoardingSeen = true;
-                      Navigator.pushReplacementNamed(context, LoginPage.id); },
-                    text: 'login',
-                  )
-                : RawMaterialButton(
-                    onPressed: () {
-                      if (currentPageIndex == 3) {
-                        return;
-                      }
-                      onUpdateCurrentPageIndex(currentPageIndex + 1);
-                    },
-                    fillColor: ColorUtility.secondary,
-                    padding: const EdgeInsets.all(10.0),
-                    shape: const CircleBorder(),
-                    child: Icon(
-                      Icons.arrow_forward,
-                      size: 20.0,
-                      color: Colors.white,
+              currentIndex == 3
+                  ? SizedBox.shrink()
+                  : ElevatedButtonRounded(
+                      onPressed: () {
+                        nextFunction();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_forward,
+                        size: 30,
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        ColorUtility.secondary,
+                      ),
                     ),
-                  ),
-          ],
-        ),
-      ],
-    );
+            ],
+          ),
+        );
+
+  nextFunction() {
+    _pageController.nextPage(duration: _kDuration, curve: _kCurve);
   }
 
- 
+  previousFunction() {
+    _pageController.previousPage(duration: _kDuration, curve: _kCurve);
+  }
+
+  _skipFunction(int index) {
+    _pageController.jumpToPage(index);
+  }
+
+  void onLogin() {
+    PreferencesService.isOnBoardingSeen = true;
+    Navigator.pushReplacementNamed(context, LoginPage.id);
+  }
 }
