@@ -16,7 +16,7 @@ class ElevatedButtonRounded extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(const Size(65, 65)),
+        fixedSize: MaterialStateProperty.all(const Size(60, 60)),
         foregroundColor: MaterialStateProperty.all<Color>(
           Colors.white,
         ),

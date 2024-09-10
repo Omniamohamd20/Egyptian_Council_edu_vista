@@ -98,12 +98,12 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   ),
                   OnBoardItemWidget(
                     title: 'Of f line Acc ess',
-                    image: ImagesUtility.pana,
+                    image: ImagesUtility.amico,
                     description: 'Of f line Acc ess',
                   ),
                   OnBoardItemWidget(
                     title: 'Course Catalog',
-                    image: ImagesUtility.frame,
+                    image: ImagesUtility.pana,
                     description: 'View in which courses you are enrolled',
                   ),
                 ],
@@ -145,7 +145,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   ],
                 ),
                 const SizedBox(
-                  height: 80,
+                  height: 60,
                 ),
                 getButtons
               ],

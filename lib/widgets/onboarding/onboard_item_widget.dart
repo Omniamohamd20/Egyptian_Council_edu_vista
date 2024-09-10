@@ -21,7 +21,7 @@ class OnBoardItemWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Image.asset(
-            image,
+            image,height: 250,
           ),
           const SizedBox(
             height: 40,

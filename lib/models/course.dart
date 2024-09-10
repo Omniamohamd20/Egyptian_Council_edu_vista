@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_vista_app/models/category.dart';
 import 'package:edu_vista_app/models/instructor.dart';
 
+
 class Course {
   String? id;
   String? title;
@@ -12,7 +13,7 @@ class Course {
   bool? has_certificate;
   Instructor? instructor;
   double? price;
-  double? rating;
+  int? rating;
   int? total_hours;
   DateTime? created_date;
 
