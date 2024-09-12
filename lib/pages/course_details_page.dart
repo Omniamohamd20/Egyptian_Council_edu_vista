@@ -115,7 +115,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      _BodyWidget()
+                      const _BodyWidget()
                     ],
                   ),
                 ),

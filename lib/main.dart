@@ -6,6 +6,7 @@ import 'package:edu_vista_app/cubit/auth_cubit.dart';
 import 'package:edu_vista_app/firebase_options.dart';
 import 'package:edu_vista_app/pages/all_categories.dart';
 import 'package:edu_vista_app/pages/all_courses.dart';
+import 'package:edu_vista_app/pages/cart_page.dart';
 import 'package:edu_vista_app/pages/course_details_page.dart';
 import 'package:edu_vista_app/pages/home_page.dart';
 import 'package:edu_vista_app/pages/login_page.dart';
@@ -83,7 +84,9 @@ class MyApp extends StatelessWidget {
                 builder: (context) => CourseDetailsPage(
                       course: data,
                     ));
-
+          case CartPage.id:
+            return MaterialPageRoute(
+                builder: (context) => const CartPage());
           default:
             return MaterialPageRoute(builder: (context) => const SplashPage());
         }

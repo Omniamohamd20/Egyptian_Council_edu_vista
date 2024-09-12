@@ -67,6 +67,7 @@ class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
             crossAxisSpacing: 15,
             shrinkWrap: true,
             crossAxisCount: 2,
+            
             children: List.generate(lectures!.length, (index) {
               return InkWell(
                 onTap: () {
@@ -82,13 +83,60 @@ class _CourseOptionsWidgetsState extends State<CourseOptionsWidgets> {
                         : const Color(0xffE0E0E0),
                     borderRadius: BorderRadius.circular(40),
                   ),
-                  child: Center(
-                    child: Text(
-                      lectures![index].title ?? 'No Name',
-                      style: TextStyle(
-                          color: selectedLecture?.id == lectures![index].id
-                              ? Colors.white
-                              : Colors.black),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            
+                            Text(
+                              lectures![index].title ?? 'No Name',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                  color:
+                                      selectedLecture?.id == lectures![index].id
+                                          ? Colors.white
+                                          : Colors.black),
+                            ),
+                            IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.file_download_outlined))
+                          ],
+                        ),
+                       Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              lectures![index].description ?? 'No description',
+                              style: TextStyle(
+                                  color: selectedLecture?.id == lectures![index].id
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                          ],
+                        ),
+                       
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                           Text(
+                              'Duration ${(lectures?[index].duration ?? 0.0).toStringAsFixed(0)} min',
+                              style: TextStyle(
+                                color:
+                                    selectedLecture?.id == lectures![index].id
+                                        ? Colors.white
+                                        : Colors.black,
+                              ),
+                            ),
+                            IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.play_circle_outline_outlined))
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),

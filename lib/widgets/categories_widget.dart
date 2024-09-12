@@ -53,7 +53,7 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
                 ),
                 itemBuilder: (context, index) => InkWell(
                   onTap: () async {
-                    Navigator.pushReplacementNamed(context, AllCourses.id,
+                    Navigator.pushNamed(context, AllCourses.id,
                         arguments: categories[index].id
                         );
                     
