@@ -99,10 +99,37 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                       const SizedBox(
                         height: 30,
                       ),
-                      Text(
-                        widget.course.title ?? 'No Name',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                widget.course.title ?? 'No Name',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 20),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                FirebaseFirestore.instance
+                                    .collection('cart') // Replace with your collection name
+                                    .doc(widget.course.id)
+                                    .set({
+                                      'course':{
+                                    'id': widget.course.id,
+                                    'name': widget.course.title,
+                                  },
+                                      'isBought': false ,
+
+                                      });
+                              },
+                              icon: Icon(Icons.add_shopping_cart_rounded))
+                        ],
                       ),
                       const SizedBox(
                         height: 5,

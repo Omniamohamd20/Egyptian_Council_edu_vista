@@ -1,5 +1,8 @@
+import 'package:edu_vista_app/pages/chat.dart';
 import 'package:edu_vista_app/pages/courses_page.dart';
 import 'package:edu_vista_app/pages/home_page.dart';
+import 'package:edu_vista_app/pages/profile.dart';
+import 'package:edu_vista_app/pages/search.dart';
 import 'package:edu_vista_app/utils/color.utility.dart';
 import 'package:flutter/material.dart';
 
@@ -17,13 +20,16 @@ class BottomBarWidget extends StatelessWidget {
   void _onTap(BuildContext context, int index) {
     Navigator.of(context)
         .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
-      return _children[index]; // Use index instead of _currentIndex
+      return _children[index]; 
     }));
   }
 
   final List<Widget> _children = [
     HomePage(),
     CoursesPage(),
+    Search(),
+    Chat(),
+    ProfilePage()
   ];
 
   @override

@@ -6,6 +6,8 @@ import 'package:edu_vista_app/widgets/courses_widget.dart';
 import 'package:edu_vista_app/widgets/label_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:paymob_payment/paymob_payment.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -59,6 +61,30 @@ class _HomePageState extends State<HomePage> {
                   onSeeAllClicked: () {},
                 ),
                 const CoursesWidget(rankValue: 'top seller'),
+                         ElevatedButton(
+                    onPressed: () async {
+                      PaymobPayment.instance.initialize(
+                        apiKey: dotenv.env[
+                            'apiKey']!, // from dashboard Select Settings -> Account Info -> API Key
+                        integrationID: int.parse(dotenv.env[
+                            'integrationID']!), // from dashboard Select Developers -> Payment Integrations -> Online Card ID
+                        iFrameID: int.parse(dotenv.env[
+                            'iFrameID']!), // from paymob Select Developers -> iframes
+                      );
+
+                      final PaymobResponse? response =
+                          await PaymobPayment.instance.pay(
+                        context: context,
+                        currency: "EGP",
+                        amountInCents: "20000", // 200 EGP
+                      );
+
+                      if (response != null) {
+                        print('Response: ${response.transactionID}');
+                        print('Response: ${response.success}');
+                      }
+                    },
+                    child: Text('paymob pay'))
               ],
             ),
           ),

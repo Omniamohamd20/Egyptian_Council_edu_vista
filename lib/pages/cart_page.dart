@@ -1,8 +1,8 @@
+import 'package:edu_vista_app/widgets/course_widget_on_cart.dart';
 import 'package:flutter/material.dart';
 
 class CartPage extends StatefulWidget {
-    static const String id = 'CartPage';
-
+  static const String id = 'CartPage';
 
   const CartPage({super.key});
 
@@ -11,7 +11,6 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +23,7 @@ class _CartPageState extends State<CartPage> {
         title: Center(child: const Text('categories')),
       ),
       body: Center(
-        child: Text('data'),
+        child: CourseWidgetOnCart(),
       ),
     );
   }

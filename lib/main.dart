@@ -33,7 +33,7 @@ void main() async {
   } catch (e) {
     print('Failed to initialize Firebase: $e');
   }
-  // await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: ".env");
 
   runApp(MultiBlocProvider(
     providers: [
