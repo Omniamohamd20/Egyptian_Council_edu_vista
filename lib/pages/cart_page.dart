@@ -20,7 +20,7 @@ class _CartPageState extends State<CartPage> {
             onPressed: () {
               Navigator.pop(context);
             }),
-        title: Center(child: const Text('categories')),
+        title: Center(child: const Text('Cart')),
       ),
       body: Center(
         child: CourseWidgetOnCart(),

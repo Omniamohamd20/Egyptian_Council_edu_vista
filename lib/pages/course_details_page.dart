@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CourseDetailsPage extends StatefulWidget {
-  static const String id = 'course_details';
+  static const String id = 'CourseDetailsPage';
   final Course course;
   const CourseDetailsPage({required this.course, super.key});
 
@@ -51,7 +51,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
     return Scaffold(
         body: Stack(
       children: [
-        // video bloc
+        // Video Bloc
         BlocBuilder<LectureBloc, LectureState>(builder: (ctx, state) {
           var stateEx = state is LectureChosenState ? state : null;
 
@@ -86,7 +86,6 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                       topRight: Radius.circular(25))),
               duration: const Duration(seconds: 3),
               alignment: Alignment.bottomCenter,
-              // height: MediaQuery.sizeOf(context).height - 220,
               height:
                   applyChanges ? MediaQuery.sizeOf(context).height - 220 : null,
               curve: Curves.easeInOut,
@@ -99,37 +98,73 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                       const SizedBox(
                         height: 30,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                widget.course.title ?? 'No Name',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w700, fontSize: 20),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                            ],
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                FirebaseFirestore.instance
-                                    .collection('cart') // Replace with your collection name
-                                    .doc(widget.course.id)
-                                    .set({
-                                      'course':{
-                                    'id': widget.course.id,
-                                    'name': widget.course.title,
-                                  },
-                                      'isBought': false ,
+                      StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                        stream: FirebaseFirestore.instance
+                            .collection('courses')
+                            .doc(widget.course.id)
+                            .snapshots(), // Listen to real-time updates
+                        builder: (ctx, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
 
-                                      });
-                              },
-                              icon: Icon(Icons.add_shopping_cart_rounded))
-                        ],
+                          if (snapshot.hasError) {
+                            return const Center(child: Text('Error occurred'));
+                          }
+
+                          if (!snapshot.hasData) {
+                            return const Center(
+                                child: Text('Course not found'));
+                          }
+
+                          var courseData = snapshot.data?.data();
+                          bool isInCart = courseData?['users_buys']?.contains(
+                                  FirebaseAuth.instance.currentUser?.uid) ??
+                              false;
+
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    widget.course.title ?? 'No Name',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                ],
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    FirebaseFirestore.instance
+                                        .collection('courses')
+                                        .doc(widget.course.id)
+                                        .update({
+                                      'users_buys': isInCart
+                                          ? FieldValue.arrayRemove([
+                                              FirebaseAuth
+                                                  .instance.currentUser?.uid
+                                            ])
+                                          : FieldValue.arrayUnion([
+                                              FirebaseAuth
+                                                  .instance.currentUser?.uid
+                                            ]),
+                                    });
+                                  },
+                                  icon: Icon(
+                                    isInCart
+                                        ? Icons.remove_shopping_cart_rounded
+                                        : Icons.add_shopping_cart_rounded,
+                                  ))
+                            ],
+                          );
+                        },
                       ),
                       const SizedBox(
                         height: 5,
@@ -189,6 +224,7 @@ class __BodyWidgetState extends State<_BodyWidget> {
                     .add(CourseOptionChosenEvent(courseOption));
               },
             ),
+            
             const SizedBox(
               height: 10,
             ),

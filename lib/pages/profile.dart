@@ -1,87 +1,110 @@
+import 'package:edu_vista_app/pages/cart_page.dart';
+import 'package:edu_vista_app/pages/login_page.dart';
 import 'package:edu_vista_app/utils/color.utility.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Profile Widget',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ProfilePage(),
-    );
-  }
-}
-
 class ProfilePage extends StatefulWidget {
+  static const String id = 'ProfilePage';
+  const ProfilePage({super.key});
+
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String downloadUrl =
-      'https://firebasestorage.googleapis.com/v0/b/edu-vista-71bae.appspot.com/o/images%2Fads2.jpg?alt=media&token=50790d57-5f68-4757-83ef-08ab92202bf6';
-  String userName = "John Doe";
-  String userEmail = "john.doe@example.com";
-  String userBio = "Web Developer and Designer.";
+  String downloadUrl = '';
+  String userName = '${FirebaseAuth.instance.currentUser?.displayName}';
+  String userEmail = "${FirebaseAuth.instance.currentUser?.email}";
+
+  @override
+
+  void initState() {
+    super.initState();
+  }
 
   void editProfile() {
+    String tempUserName =
+        userName; // Create a temporary variable to hold the new value
     showDialog(
       context: context,
       builder: (context) {
-        String? newName = userName;
-        String? newEmail = userEmail;
-        String? newBio = userBio;
-
         return AlertDialog(
-          title: Text("Edit Profile"),
+          title: const Text("Edit user name"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: "Name"),
-                onChanged: (value) => newName = value,
+                decoration: const InputDecoration(labelText: "Name"),
+                onChanged: (value) => tempUserName = value,
                 controller: TextEditingController(text: userName),
-              ),
-              TextField(
-                decoration: InputDecoration(labelText: "Email"),
-                onChanged: (value) => newEmail = value,
-                controller: TextEditingController(text: userEmail),
-              ),
-              TextField(
-                decoration: InputDecoration(labelText: "Bio"),
-                onChanged: (value) => newBio = value,
-                controller: TextEditingController(text: userBio),
               ),
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                await FirebaseAuth.instance.currentUser
+                    ?.updateDisplayName(tempUserName);
+
+                // No need to call FirebaseAuth.instance.currentUser?.reload();
                 setState(() {
-                  userName = newName ?? userName;
-                  userEmail = newEmail ?? userEmail;
-                  userBio = newBio ?? userBio;
+                  userName = tempUserName; // Update the userName state
                 });
+
                 Navigator.of(context).pop();
               },
-              child: Text("Save"),
+              child: const Text("Save"),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> logout(BuildContext context) async {
+    final shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm Logout"),
+          content: const Text("Are you sure you want to log out?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // User cancels
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true), // User confirms
+              child: const Text("Logout"),
+            ),
+          ],
+        );
+      },
+    );
+
+    // If user confirms logout
+    if (shouldLogout == true) {
+      try {
+        await FirebaseAuth.instance.signOut();
+        print("User logged out successfully.");
+
+        // Navigate back to the LoginScreen
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+          (Route<dynamic> route) => false,
+        );
+      } catch (e) {
+        print("Error logging out: $e");
+      }
+    }
   }
 
   Future<void> uploadImage() async {
@@ -101,9 +124,8 @@ class _ProfilePageState extends State<ProfilePage> {
         String url = await uploadResult.ref.getDownloadURL();
         setState(() {
           downloadUrl = url; // Update the state here
-       // Debugging
         });
-           print('Image uploaded successfully: $downloadUrl'); 
+        print('Image uploaded successfully: $downloadUrl');
       } else {
         print('Upload failed: ${uploadResult.state}'); // Debugging
       }
@@ -113,22 +135,22 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Profile"),
-      ),
+      appBar: AppBar(title: const Center(child: Text("Profile")), actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, CartPage.id);
+          },
+          icon: const Icon(Icons.shopping_cart),
+        ),
+      ]),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                height: 200,
-                width: 200,
-                child: Image.network('https://firebasestorage.googleapis.com/v0/b/edu-vista-71bae.appspot.com/o/images%2Fphoto_2024-06-11_00-15-05.jpg')),
               InkWell(
                 onTap: uploadImage, // Call the upload function when tapped
                 child: CircleAvatar(
@@ -138,35 +160,110 @@ class _ProfilePageState extends State<ProfilePage> {
                       ? NetworkImage(downloadUrl.trim()) // Trim any whitespace
                       : null,
                   child: downloadUrl.isEmpty
-                      ? Icon(Icons.person,
+                      ? const Icon(Icons.person,
                           size: 50, color: Colors.white) // Placeholder icon
                       : null,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 userName,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 userEmail,
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              SizedBox(height: 8),
-              Text(
-                userBio,
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
+              const SizedBox(height: 100),
+              Column(
+                children: [
+                  ListTile(
+                    tileColor: const Color.fromARGB(255, 206, 203, 203),
+                    title: const Text("Edit"),
+                    trailing: const SizedBox(
+                      width: 30,
+                      child: Row(
+                        children: [
+                          Icon(Icons.arrow_forward_ios,
+                              size: 15, color: Colors.black),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 15,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      editProfile();
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  ListTile(
+                    tileColor: const Color.fromARGB(255, 206, 203, 203),
+                    title: const Text("Setting"),
+                    trailing: const SizedBox(
+                      width: 30,
+                      child: Row(
+                        children: [
+                          Icon(Icons.arrow_forward_ios,
+                              size: 15, color: Colors.black),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 15,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {});
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  ListTile(
+                    tileColor: const Color.fromARGB(255, 206, 203, 203),
+                    title: const Text("About Us"),
+                    trailing: const SizedBox(
+                      width: 30,
+                      child: Row(
+                        children: [
+                          Icon(Icons.arrow_forward_ios,
+                              size: 15, color: Colors.black),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 15,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {});
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                ],
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: editProfile,
-                child: Text("Edit Profile"),
-              ),
-              SizedBox(height: 20),
-              // Add the image widget to test loading
-        
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      logout(context);
+                    },
+                    child: const Text(
+                      'Logout',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:edu_vista_app/widgets/horizontal_courses_widget.dart';
 import 'package:flutter/material.dart';
 
 class CoursesPage extends StatefulWidget {
+    static const String id = 'CoursesPage';
   const CoursesPage({super.key});
 
   @override
@@ -21,9 +22,6 @@ class _CoursesPageState extends State<CoursesPage> {
    late Future<QuerySnapshot<Map<String, dynamic>>> futureCall;
   @override
   void initState() {
-    futureCall = FirebaseFirestore.instance
-        .collection('courses')
-        .get();
     super.initState();
   }
 

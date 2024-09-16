@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:edu_vista_app/blocs/course/course_bloc.dart';
+
 import 'package:edu_vista_app/models/course.dart';
-import 'package:edu_vista_app/pages/course_details_page.dart';
 import 'package:edu_vista_app/utils/color.utility.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class HorizontalCoursesWidget extends StatefulWidget {
   const HorizontalCoursesWidget({super.key});
@@ -16,10 +15,15 @@ class HorizontalCoursesWidget extends StatefulWidget {
 
 class _HorizontalCoursesWidgetState extends State<HorizontalCoursesWidget> {
   late Future<QuerySnapshot<Map<String, dynamic>>> futureCall;
+  // late Future<QuerySnapshot<Map<String, dynamic>>> futureCall_1;
 
   @override
   void initState() {
     futureCall = FirebaseFirestore.instance.collection('courses').get();
+  //  final futureCall_1 = FirebaseFirestore.instance
+  //       .collection('course_user_progress')
+  //       .doc(FirebaseAuth.instance.currentUser!.uid) // Correctly reference the document
+  //       .get(); // Call .get() on the document reference
     super.initState();
   }
 
@@ -50,6 +54,7 @@ class _HorizontalCoursesWidgetState extends State<HorizontalCoursesWidget> {
                 .map((e) => Course.fromJson({'id': e.id, ...e.data()}))
                 .toList() ??
             []);
+            
 
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -60,8 +65,8 @@ class _HorizontalCoursesWidgetState extends State<HorizontalCoursesWidget> {
                 elevation: 0, // Remove elevation
                 color: ColorUtility.scaffoldBackground,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(10), // Optional: adjust border radius
+                  borderRadius: BorderRadius.circular(
+                      10), // Optional: adjust border radius
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
@@ -98,7 +103,8 @@ class _HorizontalCoursesWidgetState extends State<HorizontalCoursesWidget> {
                                   Icon(Icons.person_2_rounded,
                                       color: ColorUtility.gry),
                                   Text(
-                                    courses[index].instructor?.name ?? 'no name',
+                                    courses[index].instructor?.name ??
+                                        'no name',
                                     style: const TextStyle(
                                       fontSize: 14,
                                       color: ColorUtility.gry,
@@ -108,7 +114,8 @@ class _HorizontalCoursesWidgetState extends State<HorizontalCoursesWidget> {
                               ),
                               const SizedBox(height: 8),
                               // Progress Indicator
-                              SizedBox(width: 1200,
+                              SizedBox(
+                                width: 1200,
                                 child: LinearProgressIndicator(
                                   value: 0.2, // Example progress value (20%)
                                   backgroundColor: ColorUtility.gry,

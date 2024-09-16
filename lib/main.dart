@@ -7,10 +7,14 @@ import 'package:edu_vista_app/firebase_options.dart';
 import 'package:edu_vista_app/pages/all_categories.dart';
 import 'package:edu_vista_app/pages/all_courses.dart';
 import 'package:edu_vista_app/pages/cart_page.dart';
+import 'package:edu_vista_app/pages/confirm_password_page.dart';
 import 'package:edu_vista_app/pages/course_details_page.dart';
+import 'package:edu_vista_app/pages/courses_page.dart';
 import 'package:edu_vista_app/pages/home_page.dart';
 import 'package:edu_vista_app/pages/login_page.dart';
 import 'package:edu_vista_app/pages/onboarding_Page.dart';
+import 'package:edu_vista_app/pages/payment_page.dart';
+import 'package:edu_vista_app/pages/profile.dart';
 import 'package:edu_vista_app/pages/reset_password_page.dart';
 import 'package:edu_vista_app/pages/signup_page.dart';
 import 'package:edu_vista_app/pages/splash_page.dart';
@@ -33,7 +37,7 @@ void main() async {
   } catch (e) {
     print('Failed to initialize Firebase: $e');
   }
-  await dotenv.load(fileName: ".env");
+  // await dotenv.load(fileName: ".env");
 
   runApp(MultiBlocProvider(
     providers: [
@@ -56,6 +60,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          color: ColorUtility.scaffoldBackground
+        ),
         scaffoldBackgroundColor: ColorUtility.scaffoldBackground,
         fontFamily: ' PlusJakartaSans',
         colorScheme: ColorScheme.fromSeed(seedColor: ColorUtility.main),
@@ -70,23 +77,37 @@ class MyApp extends StatelessWidget {
           case SignUpPage.id:
             return MaterialPageRoute(builder: (context) => const SignUpPage());
           case ResetPasswordPage.id:
-            return MaterialPageRoute(builder: (context) => const ResetPasswordPage());
+            return MaterialPageRoute(
+                builder: (context) => const ResetPasswordPage());
+          case ConfirmPasswordPage.id:
+            return MaterialPageRoute(
+                builder: (context) => ConfirmPasswordPage(email: data));
           case OnBoardingPage.id:
-            return MaterialPageRoute(builder: (context) => const OnBoardingPage());
+            return MaterialPageRoute(
+                builder: (context) => const OnBoardingPage());
           case HomePage.id:
             return MaterialPageRoute(builder: (context) => const HomePage());
-           case AllCourses.id:
-            return MaterialPageRoute(builder: (context) => AllCourses(category_id: data,  ));
-            case AllCategories.id:
-              return MaterialPageRoute(builder: (context) => const AllCategories());
+          case AllCourses.id:
+            return MaterialPageRoute(
+                builder: (context) => AllCourses(
+                      category_id: data,
+                    ));
+          case AllCategories.id:
+            return MaterialPageRoute(
+                builder: (context) => const AllCategories());
           case CourseDetailsPage.id:
             return MaterialPageRoute(
                 builder: (context) => CourseDetailsPage(
                       course: data,
                     ));
           case CartPage.id:
-            return MaterialPageRoute(
-                builder: (context) => const CartPage());
+            return MaterialPageRoute(builder: (context) => const CartPage());
+          case CoursesPage.id:
+            return MaterialPageRoute(builder: (context) => const CoursesPage());
+          case ProfilePage.id:
+            return MaterialPageRoute(builder: (context) => const ProfilePage());
+          case PaymentPage.id:
+            return MaterialPageRoute(builder: (context) => const PaymentPage());
           default:
             return MaterialPageRoute(builder: (context) => const SplashPage());
         }

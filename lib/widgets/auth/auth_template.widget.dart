@@ -1,4 +1,5 @@
 import 'package:edu_vista_app/pages/login_page.dart';
+import 'package:edu_vista_app/pages/reset_password_page.dart';
 import 'package:edu_vista_app/pages/signup_page.dart';
 import 'package:edu_vista_app/utils/color.utility.dart';
 import 'package:edu_vista_app/widgets/Custom_text_button.dart';
@@ -9,9 +10,10 @@ import 'package:flutter/material.dart';
 class AuthTemplateWidget extends StatefulWidget {
   final Future<void> Function()? onLogin;
   final Future<void> Function()? onSignUp;
+  final Future<void> Function()? reset;
   final Widget body;
   AuthTemplateWidget(
-      {this.onLogin, this.onSignUp, required this.body, super.key}) {
+      {this.onLogin, this.onSignUp, this.reset,required this.body, super.key}) {
     assert(onLogin != null || onSignUp != null,
         'onLogin or onSignUp should not be null');
   }
@@ -164,7 +166,9 @@ class _AuthTemplateWidgetState extends State<AuthTemplateWidget> {
                     widget.body,
                     CustomTextButton(
                       label: 'Forgot Password ?',
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, ResetPasswordPage.id);
+                      },
                     ),
                     Row(
                       children: [

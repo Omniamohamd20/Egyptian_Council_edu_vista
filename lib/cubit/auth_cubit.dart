@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:edu_vista_app/pages/confirm_password_page.dart';
 import 'package:edu_vista_app/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -115,5 +116,50 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
     }
+  }
+}
+
+
+Future<void> reset({
+  required BuildContext context,
+  required TextEditingController emailController,
+}) async {
+  try {
+    // Send password reset email
+    await FirebaseAuth.instance.sendPasswordResetEmail(
+      email: emailController.text,
+    );
+
+    if (!context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Password reset email sent successfully.'),
+      ),
+    );
+
+    Navigator.pushReplacementNamed(context, ConfirmPasswordPage.id);
+  } on FirebaseAuthException catch (e) {
+    if (!context.mounted) return;
+    if (e.code == 'invalid-email') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('The email address is badly formatted.'),
+        ),
+      );
+    } else if (e.code == 'user-not-found') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No user found with this email.'),
+        ),
+      );
+    }
+  } catch (e) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('An unexpected error occurred: $e'),
+      ),
+    );
   }
 }

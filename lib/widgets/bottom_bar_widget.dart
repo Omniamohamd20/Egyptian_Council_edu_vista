@@ -1,4 +1,3 @@
-import 'package:edu_vista_app/pages/chat.dart';
 import 'package:edu_vista_app/pages/courses_page.dart';
 import 'package:edu_vista_app/pages/home_page.dart';
 import 'package:edu_vista_app/pages/profile.dart';
@@ -28,7 +27,6 @@ class BottomBarWidget extends StatelessWidget {
     HomePage(),
     CoursesPage(),
     Search(),
-    Chat(),
     ProfilePage()
   ];
 
@@ -46,10 +44,6 @@ class BottomBarWidget extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.search, color: Colors.black),
-          label: '',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat_bubble_outline_rounded, color: Colors.black),
           label: '',
         ),
         BottomNavigationBarItem(

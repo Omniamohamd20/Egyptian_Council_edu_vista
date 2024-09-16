@@ -1,15 +1,17 @@
+import 'package:edu_vista_app/pages/login_page.dart';
 import 'package:edu_vista_app/widgets/custom_elevated_button.dart';
 import 'package:edu_vista_app/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 
-class ConfirmPasswrdPage extends StatefulWidget {
-  const ConfirmPasswrdPage({super.key});
+class ConfirmPasswordPage extends StatefulWidget {
+  static const String id = 'ConfirmPasswordPage';
+  const ConfirmPasswordPage({super.key, required email});
 
   @override
-  State<ConfirmPasswrdPage> createState() => _ConfirmPasswrdPageState();
+  State<ConfirmPasswordPage> createState() => _ConfirmPasswordPageState();
 }
 
-class _ConfirmPasswrdPageState extends State<ConfirmPasswrdPage> {
+class _ConfirmPasswordPageState extends State<ConfirmPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +54,9 @@ class _ConfirmPasswrdPageState extends State<ConfirmPasswrdPage> {
                     height: 20,
                   ),
                   CustomElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.popAndPushNamed(context, LoginPage.id);
+                    },
                     child: const Text(
                       'SUBMIT',
                       style:
