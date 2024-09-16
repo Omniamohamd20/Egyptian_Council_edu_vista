@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_vista_app/blocs/course/course_bloc.dart';
-import 'package:edu_vista_app/models/cart.dart';
 import 'package:edu_vista_app/models/course.dart';
 import 'package:edu_vista_app/pages/payment_page.dart';
 import 'package:edu_vista_app/utils/color.utility.dart';
